@@ -102,78 +102,33 @@
   });
 </script>
 
-<canvas id="contours" bind:this={canvas}></canvas>
+<canvas id="contours" class="inline" bind:this={canvas}></canvas>
 
-<div>
-  <h1>status</h1>
-  <div id="servers">
+<div class="mx-[10em] mb-[12em]">
+  <h1 class="mb-[0.5em] text-[4em] font-bold">status</h1>
+  <div id="servers" class="flex flex-wrap gap-[1em]">
     {#each servers as server}
-      <div class={server.status}>
-        <h2>{server.host}</h2>
-        <h3>
-          <span>{server.status === "online" ? "●" : "○"}</span>
+      <div
+        class={[
+          "block h-[8em] w-[16em] shrink-0 grow-0 box-content border p-[1em]",
+          server.status === "online"
+            ? "border-white"
+            : "border-[gray] text-[darkslategray]",
+        ]}
+      >
+        <h2 class="text-[1.5em] font-bold">{server.host}</h2>
+        <h3
+          class={[
+            "text-[1.17em] font-bold",
+            server.status === "online" ? "text-[greenyellow]" : "",
+          ]}
+        >
+          <span class="overflow-hidden text-[0.75em]"
+            >{server.status === "online" ? "●" : "○"}</span
+          >
           {server.status}
         </h3>
       </div>
     {/each}
   </div>
 </div>
-
-<style>
-  :global(*) {
-    background-color: black;
-    color: white;
-    font-family: MS PGothic;
-    margin: 0;
-    padding: 0;
-  }
-
-  :global(body > div) {
-    margin: 0 10em 12em;
-  }
-
-  :global(body > div > h1) {
-    font-size: 4em;
-    margin-bottom: 0.5em;
-  }
-
-  #servers {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0;
-    gap: 1em;
-  }
-
-  #servers > div {
-    display: block;
-    flex-grow: 0;
-    flex-shrink: 0;
-    width: 16em;
-    height: 8em;
-    padding: 1em;
-  }
-
-  #servers span {
-    font-size: 0.75em;
-    overflow: hidden;
-  }
-
-  .online {
-    border: solid white 1px;
-  }
-
-  .online h3,
-  .online span {
-    color: greenyellow;
-  }
-
-  .offline {
-    border: solid gray 1px;
-  }
-
-  .offline h2,
-  .offline h3,
-  .offline span {
-    color: darkslategray;
-  }
-</style>
