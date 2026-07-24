@@ -1,9 +1,9 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { json } from "@sveltejs/kit";
+import { getHosts } from "$lib/server/hosts";
 
 const execFileAsync = promisify(execFile);
-const hosts = ["192.168.31.125", "192.168.31.169", "192.168.31.1"];
 const pingTimeout = 1500;
 
 /** @param {string} host */
@@ -35,7 +35,7 @@ async function getHostStatus(host) {
 
 /** @type {import("./$types").RequestHandler} */
 export async function GET() {
-  return json(await Promise.all(hosts.map(getHostStatus)), {
+  return json(await Promise.all(getHosts().map(getHostStatus)), {
     headers: { "Cache-Control": "no-store" },
   });
 }

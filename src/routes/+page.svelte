@@ -1,13 +1,15 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, untrack } from "svelte";
   import Contour from "$lib/Contour.svelte";
 
   /** @typedef {{ host: string, status: "checking" | "online" | "offline" }} Server */
-
-  const hosts = ["192.168.31.125", "192.168.31.169", "192.168.31.1"];
+  /** @type {import("./$types").PageProps} */
+  let { data } = $props();
 
   /** @type {Server[]} */
-  let servers = hosts.map((host) => ({ host, status: "checking" }));
+  let servers = $state(
+    untrack(() => data.hosts.map((host) => ({ host, status: "checking" }))),
+  );
 
   onMount(() => {
     let active = true;

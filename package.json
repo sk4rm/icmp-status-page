@@ -20,5 +20,8 @@
     "tailwindcss": "^4.3.3",
     "typescript": "6.0.2",
     "vite": "latest"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0"
   }
 }
