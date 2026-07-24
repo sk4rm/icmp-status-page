@@ -1,11 +1,40 @@
 <script>
+  import { onMount } from "svelte";
   import Contour from "./Contour.svelte";
 
+  /** @typedef {{ host: string, status: "checking" | "online" | "offline" }} Server */
+
   const hosts = ["192.168.31.125", "192.168.31.169", "192.168.31.1"];
-  const servers = hosts.map((host) => ({
-    host,
-    status: Math.random() > 0.5 ? "online" : "offline",
-  }));
+
+  /** @type {Server[]} */
+  let servers = hosts.map((host) => ({ host, status: "checking" }));
+
+  onMount(() => {
+    let active = true;
+
+    async function refreshStatuses() {
+      try {
+        const response = await fetch("/api/status", { cache: "no-store" });
+        if (!response.ok) throw new Error("Status request failed");
+
+        /** @type {Server[]} */
+        const statuses = await response.json();
+        if (active) servers = statuses;
+      } catch {
+        if (active) {
+          servers = servers.map(({ host }) => ({ host, status: "offline" }));
+        }
+      }
+    }
+
+    refreshStatuses();
+    const refreshTimer = setInterval(refreshStatuses, 30_000);
+
+    return () => {
+      active = false;
+      clearInterval(refreshTimer);
+    };
+  });
 </script>
 
 <Contour />
@@ -25,7 +54,7 @@
             : "border-gray-500 text-slate-600",
         ]}
       >
-        <h2 class="text-2xl font-bold font-mono">{server.host}</h2>
+        <h2 class="font-mono text-2xl font-bold">{server.host}</h2>
         <h3
           class={[
             "text-lg font-bold",
