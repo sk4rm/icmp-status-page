@@ -17,13 +17,18 @@
     if (!context) return;
 
     let animationFrame = 0;
+    let canvasWidth = 0;
+    let canvasHeight = 0;
 
     function resize() {
-      canvas.width = innerWidth * devicePixelRatio;
-      canvas.height = 200 * devicePixelRatio;
-      canvas.style.width = `${innerWidth}px`;
-      canvas.style.minHeight = "200px";
-      context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      const bounds = canvas.getBoundingClientRect();
+      const pixelRatio = devicePixelRatio || 1;
+
+      canvasWidth = Math.max(1, Math.round(bounds.width));
+      canvasHeight = Math.max(1, Math.round(bounds.height));
+      canvas.width = Math.round(canvasWidth * pixelRatio);
+      canvas.height = Math.round(canvasHeight * pixelRatio);
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     }
 
     /**
@@ -45,8 +50,8 @@
       ];
 
       for (const [positionX, positionY, strength] of disturbances) {
-        const deltaX = x - positionX * innerWidth;
-        const deltaY = y - positionY * 500;
+        const deltaX = x - positionX * canvasWidth;
+        const deltaY = y - positionY * canvasHeight;
         const radius = 150;
 
         distance +=
@@ -63,9 +68,9 @@
       const time = timestamp * 0.00015;
 
       context.fillStyle = "#050609";
-      context.fillRect(0, 0, innerWidth, 500);
+      context.fillRect(0, 0, canvasWidth, canvasHeight);
 
-      const gradient = context.createLinearGradient(0, 0, innerWidth, 0);
+      const gradient = context.createLinearGradient(0, 0, canvasWidth, 0);
       gradient.addColorStop(0, "#a55cff");
       gradient.addColorStop(0.5, "#718cff");
       gradient.addColorStop(1, "#55d8ff");
@@ -75,10 +80,10 @@
 
       const spacing = 9;
 
-      for (let baseY = -80; baseY < 580; baseY += spacing) {
+      for (let baseY = -80; baseY < canvasHeight + 80; baseY += spacing) {
         context.beginPath();
 
-        for (let x = 0; x <= innerWidth; x += 4) {
+        for (let x = 0; x <= canvasWidth; x += 4) {
           const y = baseY + displacement(x, baseY, time);
 
           if (x === 0) context.moveTo(x, y);
@@ -91,26 +96,27 @@
       animationFrame = requestAnimationFrame(draw);
     }
 
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(canvas);
     resize();
-    addEventListener("resize", resize);
     animationFrame = requestAnimationFrame(draw);
 
     return () => {
-      removeEventListener("resize", resize);
+      resizeObserver.disconnect();
       cancelAnimationFrame(animationFrame);
     };
   });
 </script>
 
-<canvas id="contours" class="inline" bind:this={canvas}></canvas>
+<canvas id="contours" class="block h-48 w-full sm:h-52" bind:this={canvas}></canvas>
 
-<div class="mx-40 mb-48">
+<div class="mx-auto mb-48 w-full max-w-5xl px-4 sm:px-8 lg:px-10">
   <h1 class="mb-8 text-6xl font-bold">status</h1>
-  <div id="servers" class="flex flex-wrap gap-4">
+  <div id="servers" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {#each servers as server}
       <div
         class={[
-          "h-32 w-64 flex-none border p-4",
+          "min-h-32 w-full border p-4",
           server.status === "online"
             ? "border-white"
             : "border-gray-500 text-slate-600",
