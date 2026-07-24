@@ -104,26 +104,26 @@
 
 <canvas id="contours" class="inline" bind:this={canvas}></canvas>
 
-<div class="mx-[10em] mb-[12em]">
-  <h1 class="mb-[0.5em] text-[4em] font-bold">status</h1>
-  <div id="servers" class="flex flex-wrap gap-[1em]">
+<div class="mx-40 mb-48">
+  <h1 class="mb-8 text-6xl font-bold">status</h1>
+  <div id="servers" class="flex flex-wrap gap-4">
     {#each servers as server}
       <div
         class={[
-          "block h-[8em] w-[16em] shrink-0 grow-0 box-content border p-[1em]",
+          "h-32 w-64 flex-none border p-4",
           server.status === "online"
             ? "border-white"
-            : "border-[gray] text-[darkslategray]",
+            : "border-gray-500 text-slate-600",
         ]}
       >
-        <h2 class="text-[1.5em] font-bold">{server.host}</h2>
+        <h2 class="text-2xl font-bold">{server.host}</h2>
         <h3
           class={[
-            "text-[1.17em] font-bold",
-            server.status === "online" ? "text-[greenyellow]" : "",
+            "text-lg font-bold",
+            server.status === "online" ? "text-lime-400" : "",
           ]}
         >
-          <span class="overflow-hidden text-[0.75em]"
+          <span class="overflow-hidden text-sm"
             >{server.status === "online" ? "●" : "○"}</span
           >
           {server.status}
