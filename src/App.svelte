@@ -32,9 +32,18 @@
             server.status === "online" ? "text-lime-400" : "",
           ]}
         >
-          <span class="overflow-hidden text-sm"
-            >{server.status === "online" ? "●" : "○"}</span
+          <span
+            class="inline-grid place-items-center align-middle text-xs leading-none"
           >
+            {#if server.status === "online"}
+              <span class="col-start-1 row-start-1 animate-ping opacity-75"
+                >●</span
+              >
+            {/if}
+            <span class="col-start-1 row-start-1"
+              >{server.status === "online" ? "●" : "○"}</span
+            >
+          </span>
           {server.status}
         </h3>
       </div>
