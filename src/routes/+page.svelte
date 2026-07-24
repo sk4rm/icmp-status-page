@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import Contour from "./Contour.svelte";
+  import Contour from "$lib/Contour.svelte";
 
   /** @typedef {{ host: string, status: "checking" | "online" | "offline" }} Server */
 
@@ -37,10 +37,14 @@
   });
 </script>
 
+<svelte:head>
+  <title>status page</title>
+</svelte:head>
+
 <Contour />
 
 <div class="mx-auto mb-48 w-full max-w-5xl px-4 sm:px-8 lg:px-10">
-  <h1 class="mb-8 text-6xl font-bold">status</h1>
+  <h1 class="my-8 text-6xl font-bold">status</h1>
   <div
     id="servers"
     class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
@@ -54,12 +58,9 @@
             : "border-gray-500 text-slate-600",
         ]}
       >
-        <h2 class="font-mono text-2xl font-bold">{server.host}</h2>
+        <h2 class="font-mono text-2xl">{server.host}</h2>
         <h3
-          class={[
-            "text-lg font-bold",
-            server.status === "online" ? "text-lime-400" : "",
-          ]}
+          class={["text-sm", server.status === "online" ? "text-lime-400" : ""]}
         >
           <span class="inline-grid size-3 place-items-center align-middle">
             {#if server.status === "online"}

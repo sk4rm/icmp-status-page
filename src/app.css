@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "MS PGothic", sans-serif;
+  --font-sans: Inter, sans-serif;
+}
+
+:root {
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
+}
+
+@supports (font-variation-settings: normal) {
+  :root {
+    --font-sans: InterVariable, sans-serif;
+  }
 }
