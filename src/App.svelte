@@ -25,24 +25,25 @@
             : "border-gray-500 text-slate-600",
         ]}
       >
-        <h2 class="text-2xl font-bold">{server.host}</h2>
+        <h2 class="text-2xl font-bold font-mono">{server.host}</h2>
         <h3
           class={[
             "text-lg font-bold",
             server.status === "online" ? "text-lime-400" : "",
           ]}
         >
-          <span
-            class="inline-grid place-items-center align-middle text-xs leading-none"
-          >
+          <span class="inline-grid size-3 place-items-center align-middle">
             {#if server.status === "online"}
-              <span class="col-start-1 row-start-1 animate-ping opacity-75"
-                >●</span
-              >
+              <span
+                class="col-start-1 row-start-1 size-2 animate-ping rounded-full border border-current opacity-75"
+              ></span>
             {/if}
-            <span class="col-start-1 row-start-1"
-              >{server.status === "online" ? "●" : "○"}</span
-            >
+            <span
+              class={[
+                "col-start-1 row-start-1 size-2 rounded-full border border-current",
+                server.status === "online" ? "bg-current" : "",
+              ]}
+            ></span>
           </span>
           {server.status}
         </h3>
