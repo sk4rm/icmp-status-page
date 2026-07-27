@@ -1,6 +1,7 @@
 <script>
   import { onMount, untrack } from "svelte";
   import Contour from "$lib/Contour.svelte";
+  import RelativeTimestamp from "$lib/RelativeTimestamp.svelte";
 
   /** @typedef {{ host: string, status: "checking" | "online" | "offline" }} Server */
   /** @type {import("./$types").PageProps} */
@@ -10,6 +11,9 @@
   let servers = $state(
     untrack(() => data.hosts.map((host) => ({ host, status: "checking" }))),
   );
+
+  /** @type {number | null} */
+  let lastCheckedAt = $state(null);
 
   onMount(() => {
     let active = true;
@@ -27,6 +31,8 @@
           servers = servers.map(({ host }) => ({ host, status: "offline" }));
         }
       }
+
+      lastCheckedAt = Date.now();
     }
 
     refreshStatuses();
@@ -46,7 +52,8 @@
 <Contour />
 
 <div class="mx-auto mb-48 w-full max-w-5xl px-4 sm:px-8 lg:px-10">
-  <h1 class="my-8 text-6xl font-bold">status</h1>
+  <h1 class="mt-8 text-6xl font-bold">status</h1>
+  <RelativeTimestamp {lastCheckedAt} />
   <div
     id="servers"
     class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
