@@ -76,7 +76,7 @@
         class={[
           "min-h-32 w-full border p-4",
           server.status === "online"
-            ? "border-white"
+            ? "border-gray-300"
             : "border-gray-500 text-slate-600",
         ]}
       >
@@ -99,7 +99,17 @@
           </span>
           {server.status}
         </h3>
-        <rect class="bg-white h-full w-full"></rect>
+        <div
+          class={[
+            "flex justify-center mt-8 h-2 w-full gap-0.75",
+            server.status === "online" ? "text-lime-400" : "text-slate-600",
+          ]}
+          aria-hidden="true"
+        >
+          {#each Array(60) as _}
+            <span class="h-full w-px bg-current"></span>
+          {/each}
+        </div>
       </div>
     {/each}
   </div>
