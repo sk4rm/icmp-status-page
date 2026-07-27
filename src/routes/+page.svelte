@@ -43,6 +43,10 @@
       clearInterval(refreshTimer);
     };
   });
+
+  function onEditButtonClick() {
+    alert("wip");
+  }
 </script>
 
 <svelte:head>
@@ -52,7 +56,16 @@
 <Contour />
 
 <div class="mx-auto mb-48 w-full max-w-5xl px-4 sm:px-8 lg:px-10">
-  <h1 class="mt-8 text-6xl font-bold">status</h1>
+  <div class="mt-8 flex">
+    <h1 class="text-6xl font-bold">status</h1>
+    <button
+      class="border size-12 my-auto ml-auto border-gray-500 text-slate-600 hover:border-red-500 hover:text-red-600 hover:cursor-not-allowed hidden md:block"
+      onclick={onEditButtonClick}
+      disabled
+    >
+      ✎
+    </button>
+  </div>
   <RelativeTimestamp {lastCheckedAt} />
   <div
     id="servers"
@@ -86,6 +99,7 @@
           </span>
           {server.status}
         </h3>
+        <rect class="bg-white h-full w-full"></rect>
       </div>
     {/each}
   </div>
